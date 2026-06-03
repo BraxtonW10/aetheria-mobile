@@ -2,21 +2,192 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 <title>Legends of Aetheria</title>
 
 <style>
-html,body{
+
+*{
 margin:0;
 padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+html,body{
+width:100%;
+height:100%;
 overflow:hidden;
 background:#000;
-font-family:Arial,sans-serif;
 }
 
 canvas{
 display:block;
+width:100vw;
+height:100vh;
 touch-action:none;
+}
+
+#titleScreen{
+position:fixed;
+inset:0;
+background:linear-gradient(#1d3557,#2a9d8f);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+#gameTitle{
+font-size:48px;
+font-weight:bold;
+color:white;
+text-align:center;
+margin-bottom:20px;
+}
+
+#gameSubtitle{
+font-size:20px;
+color:white;
+margin-bottom:40px;
+}
+
+.menuBtn{
+width:260px;
+padding:15px;
+margin:10px;
+border:none;
+border-radius:12px;
+font-size:22px;
+background:white;
+}
+
+#creator{
+position:fixed;
+inset:0;
+background:#111;
+color:white;
+display:none;
+z-index:900;
+overflow:auto;
+padding:20px;
+}
+
+.creatorTitle{
+font-size:32px;
+margin-bottom:20px;
+}
+
+.creatorLabel{
+margin-top:15px;
+margin-bottom:5px;
+font-size:18px;
+}
+
+.creatorInput{
+width:100%;
+padding:12px;
+font-size:18px;
+border-radius:8px;
+border:none;
+}
+
+.colorRow{
+display:flex;
+gap:10px;
+margin-top:10px;
+flex-wrap:wrap;
+}
+
+.colorBtn{
+width:50px;
+height:50px;
+border-radius:50%;
+border:3px solid white;
+}
+
+#gameUI{
+display:none;
+}
+
+#topBar{
+position:fixed;
+top:10px;
+left:10px;
+right:10px;
+display:flex;
+justify-content:space-between;
+pointer-events:none;
+z-index:100;
+}
+
+.panel{
+background:rgba(0,0,0,.7);
+color:white;
+padding:10px;
+border-radius:12px;
+}
+
+#questBox{
+position:fixed;
+top:90px;
+left:10px;
+background:rgba(0,0,0,.7);
+color:white;
+padding:10px;
+border-radius:12px;
+z-index:100;
+}
+
+#joy{
+position:fixed;
+left:20px;
+bottom:20px;
+width:120px;
+height:120px;
+border-radius:50%;
+background:rgba(255,255,255,.15);
+display:none;
+z-index:100;
+}
+
+#stick{
+position:absolute;
+left:40px;
+top:40px;
+width:40px;
+height:40px;
+border-radius:50%;
+background:white;
+}
+
+#interactBtn{
+position:fixed;
+right:20px;
+bottom:40px;
+width:90px;
+height:90px;
+border:none;
+border-radius:50%;
+font-size:24px;
+background:#ffb703;
+display:none;
+z-index:100;
+}
+
+#menuBtn{
+position:fixed;
+right:20px;
+bottom:150px;
+width:90px;
+height:90px;
+border:none;
+border-radius:50%;
+font-size:20px;
+background:#219ebc;
+display:none;
+z-index:100;
 }
 
 #dialog{
@@ -31,33 +202,139 @@ color:white;
 padding:15px;
 border-radius:12px;
 display:none;
-font-size:18px;
-z-index:100;
+z-index:150;
 }
 
-#joy{
-position:fixed;
-left:20px;
-bottom:20px;
-width:120px;
-height:120px;
-border-radius:50%;
-background:rgba(255,255,255,.15);
-z-index:100;
-}
-
-#stick{
-position:absolute;
-left:40px;
-top:40px;
-width:40px;
-height:40px;
-border-radius:50%;
-background:white;
-}
 </style>
 </head>
 <body>
+
+<div id="titleScreen">
+
+<div id="gameTitle">
+LEGENDS OF AETHERIA
+</div>
+
+<div id="gameSubtitle">
+A Monster Catching Adventure
+</div>
+
+<button class="menuBtn" id="newGameBtn">
+New Game
+</button>
+
+<button class="menuBtn">
+Continue
+</button>
+
+</div>
+
+<div id="creator">
+
+<div class="creatorTitle">
+Create Your Trainer
+</div>
+
+<div class="creatorLabel">
+Trainer Name
+</div>
+
+<input
+id="playerName"
+class="creatorInput"
+value="Trainer"
+>
+
+<div class="creatorLabel">
+Hair Color
+</div>
+
+<div class="colorRow">
+
+<button class="colorBtn" data-hair="#000000" style="background:#000000"></button>
+
+<button class="colorBtn" data-hair="#5a3825" style="background:#5a3825"></button>
+
+<button class="colorBtn" data-hair="#c68642" style="background:#c68642"></button>
+
+<button class="colorBtn" data-hair="#ffffff" style="background:#ffffff"></button>
+
+</div>
+<div class="creatorLabel">
+Skin Tone
+</div>
+
+<div class="colorRow">
+
+<button class="colorBtn" data-skin="#f2d2b6" style="background:#f2d2b6"></button>
+
+<button class="colorBtn" data-skin="#d8a47f" style="background:#d8a47f"></button>
+
+<button class="colorBtn" data-skin="#b97a57" style="background:#b97a57"></button>
+
+<button class="colorBtn" data-skin="#8d5524" style="background:#8d5524"></button>
+
+</div>
+
+<div class="creatorLabel">
+Shirt Color
+</div>
+
+<div class="colorRow">
+
+<button class="colorBtn" data-shirt="#cc0000" style="background:#cc0000"></button>
+
+<button class="colorBtn" data-shirt="#0066cc" style="background:#0066cc"></button>
+
+<button class="colorBtn" data-shirt="#22aa22" style="background:#22aa22"></button>
+
+<button class="colorBtn" data-shirt="#8844cc" style="background:#8844cc"></button>
+
+</div>
+
+<div class="creatorLabel">
+Pants Color
+</div>
+
+<div class="colorRow">
+
+<button class="colorBtn" data-pants="#222222" style="background:#222222"></button>
+
+<button class="colorBtn" data-pants="#444444" style="background:#444444"></button>
+
+<button class="colorBtn" data-pants="#1a3d7c" style="background:#1a3d7c"></button>
+
+<button class="colorBtn" data-pants="#5a3825" style="background:#5a3825"></button>
+
+</div>
+
+<br><br>
+
+<button class="menuBtn" id="startAdventureBtn">
+Start Adventure
+</button>
+
+</div>
+
+<div id="gameUI">
+
+<div id="topBar">
+
+<div class="panel">
+<span id="moneyText">₳1000</span>
+</div>
+
+<div class="panel">
+<span id="orbText">Nova Orbs: 5</span>
+</div>
+
+</div>
+
+<div id="questBox">
+Objective: Visit Professor Cedar
+</div>
+
+</div>
 
 <canvas id="game"></canvas>
 
@@ -66,6 +343,14 @@ background:white;
 <div id="joy">
 <div id="stick"></div>
 </div>
+
+<button id="interactBtn">
+Talk
+</button>
+
+<button id="menuBtn">
+Menu
+</button>
 
 <script>
 
@@ -76,87 +361,221 @@ function resize(){
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 }
+
 resize();
 window.addEventListener("resize",resize);
 
+const titleScreen=document.getElementById("titleScreen");
+const creator=document.getElementById("creator");
+const gameUI=document.getElementById("gameUI");
+
+const newGameBtn=document.getElementById("newGameBtn");
+const startAdventureBtn=document.getElementById("startAdventureBtn");
+
 const dialog=document.getElementById("dialog");
 
-const player={
-x:400,
-y:300,
-w:32,
-h:32,
-speed:3,
-color:"#ff5533"
+let gameStarted=false;
+
+const saveData={
+
+name:"Trainer",
+
+hair:"#000000",
+
+skin:"#f2d2b6",
+
+shirt:"#cc0000",
+
+pants:"#222222",
+
+money:1000,
+
+orbs:5,
+
+quest:"Visit Professor Cedar"
+
 };
 
-const camera={
-x:0,
-y:0
+newGameBtn.onclick=()=>{
+
+titleScreen.style.display="none";
+creator.style.display="block";
+
+};
+startAdventureBtn.onclick=()=>{
+
+saveData.name=
+document.getElementById("playerName").value || "Trainer";
+
+creator.style.display="none";
+
+gameUI.style.display="block";
+
+document.getElementById("joy").style.display="block";
+document.getElementById("interactBtn").style.display="block";
+document.getElementById("menuBtn").style.display="block";
+
+gameStarted=true;
+
+showDialog(
+"Mom: Professor Cedar is looking for you!"
+);
+
 };
 
-let moveX=0;
-let moveY=0;
+document.querySelectorAll("[data-hair]").forEach(btn=>{
+
+btn.onclick=()=>{
+
+saveData.hair=
+btn.dataset.hair;
+
+};
+
+});
+
+document.querySelectorAll("[data-skin]").forEach(btn=>{
+
+btn.onclick=()=>{
+
+saveData.skin=
+btn.dataset.skin;
+
+};
+
+});
+
+document.querySelectorAll("[data-shirt]").forEach(btn=>{
+
+btn.onclick=()=>{
+
+saveData.shirt=
+btn.dataset.shirt;
+
+};
+
+});
+
+document.querySelectorAll("[data-pants]").forEach(btn=>{
+
+btn.onclick=()=>{
+
+saveData.pants=
+btn.dataset.pants;
+
+};
+
+});
 
 function showDialog(text){
+
 dialog.innerText=text;
+
 dialog.style.display="block";
 
 setTimeout(()=>{
+
 dialog.style.display="none";
-},3000);
+
+},3500);
+
 }
 
+const player={
+
+x:500,
+y:500,
+
+w:34,
+h:50,
+
+speed:3
+
+};
+
+const pyrox={
+
+x:450,
+y:540,
+
+flameFrame:0
+
+};
+
+const camera={
+
+x:0,
+y:0
+
+};
+
 const houses=[
+
 {
 x:700,
-y:300,
-w:180,
-h:140,
+y:350,
+w:220,
+h:160,
 name:"Professor Cedar Lab"
 },
+
 {
 x:250,
-y:500,
-w:160,
-h:120,
+y:550,
+w:200,
+h:140,
 name:"Your House"
 }
+
 ];
 
 const npcs=[
+
 {
-x:520,
-y:420,
-text:"Welcome to Oakwind Village!"
+x:500,
+y:700,
+text:"Oakwind Village is peaceful."
 },
+
 {
-x:850,
-y:520,
-text:"Professor Cedar is waiting for you."
+x:840,
+y:560,
+text:"Professor Cedar studies Aetherons."
 }
+
 ];
 
 const trees=[];
 
-for(let i=0;i<80;i++){
+for(let i=0;i<120;i++){
+
 trees.push({
-x:Math.random()*2500,
-y:Math.random()*1800
+
+x:Math.random()*3500,
+y:Math.random()*2500
+
 });
+
 }
+
+let moveX=0;
+let moveY=0;
 function interact(){
 
 for(let npc of npcs){
 
 const dx=player.x-npc.x;
 const dy=player.y-npc.y;
+
 const dist=Math.sqrt(dx*dx+dy*dy);
 
-if(dist<80){
+if(dist<90){
+
 showDialog(npc.text);
 return;
+
 }
+
 }
 
 for(let house of houses){
@@ -169,66 +588,104 @@ const dy=player.y-cy;
 
 const dist=Math.sqrt(dx*dx+dy*dy);
 
-if(dist<140){
-showDialog("Entered "+house.name);
+if(dist<170){
+
+if(house.name==="Professor Cedar Lab"){
+
+showDialog(
+"Professor Cedar: Take care of Pyrox. Your journey starts now!"
+);
+
+document.getElementById("questBox").innerText=
+"Objective: Reach Verdant Forest";
+
+}else{
+
+showDialog(
+"You are home."
+);
+
+}
+
 return;
-}
-}
+
 }
 
-window.addEventListener("keydown",e=>{
-
-if(e.key==="e"){
-interact();
 }
 
-});
+}
+
+document.getElementById("interactBtn").onclick=
+interact;
 
 function update(){
+
+if(!gameStarted)return;
 
 player.x+=moveX;
 player.y+=moveY;
 
-camera.x=player.x-canvas.width/2;
-camera.y=player.y-canvas.height/2;
+camera.x=
+player.x-canvas.width/2;
 
-if(player.x<0) player.x=0;
-if(player.y<0) player.y=0;
+camera.y=
+player.y-canvas.height/2;
 
-if(player.x>3000) player.x=3000;
-if(player.y>2000) player.y=2000;
+if(player.x<0)player.x=0;
+if(player.y<0)player.y=0;
+
+if(player.x>4000)player.x=4000;
+if(player.y>3000)player.y=3000;
+
+pyrox.x+=
+((player.x-50)-pyrox.x)*0.08;
+
+pyrox.y+=
+((player.y+40)-pyrox.y)*0.08;
+
+pyrox.flameFrame+=0.15;
 
 }
 
-function drawWorld(){
-
-ctx.fillStyle="#4caf50";
-ctx.fillRect(
--camera.x,
--camera.y,
-3000,
-2000
-);
+function drawTrees(){
 
 for(let tree of trees){
 
-ctx.fillStyle="#145214";
+const x=tree.x-camera.x;
+const y=tree.y-camera.y;
+
+ctx.fillStyle="#6b4f2a";
+
+ctx.fillRect(
+x-6,
+y,
+12,
+25
+);
+
+ctx.fillStyle="#1f7a1f";
 
 ctx.beginPath();
+
 ctx.arc(
-tree.x-camera.x,
-tree.y-camera.y,
-25,
+x,
+y,
+24,
 0,
 Math.PI*2
 );
 
 ctx.fill();
+
 }
+
+}
+
+function drawHouses(){
 
 for(let house of houses){
 
-ctx.fillStyle="#c28c52";
+ctx.fillStyle="#c98b4a";
 
 ctx.fillRect(
 house.x-camera.x,
@@ -237,47 +694,238 @@ house.w,
 house.h
 );
 
+ctx.fillStyle="#8b0000";
+
+ctx.fillRect(
+house.x-camera.x,
+house.y-camera.y,
+house.w,
+40
+);
+
 ctx.fillStyle="black";
-ctx.font="16px Arial";
 
 ctx.fillText(
 house.name,
 house.x-camera.x+10,
-house.y-camera.y+20
+house.y-camera.y+25
 );
+
 }
 
-for(let npc of npcs){
-
-ctx.fillStyle="blue";
-
-ctx.fillRect(
-npc.x-camera.x,
-npc.y-camera.y,
-28,
-28
-);
-}
 }
 function drawPlayer(){
 
-ctx.fillStyle=player.color;
+const px=player.x-camera.x;
+const py=player.y-camera.y;
+
+ctx.fillStyle=saveData.skin;
+
+ctx.beginPath();
+ctx.arc(
+px+17,
+py+10,
+10,
+0,
+Math.PI*2
+);
+ctx.fill();
+
+ctx.fillStyle=saveData.hair;
+
+ctx.beginPath();
+ctx.arc(
+px+17,
+py+7,
+10,
+Math.PI,
+0
+);
+ctx.fill();
+
+ctx.fillStyle=saveData.shirt;
 
 ctx.fillRect(
-player.x-camera.x,
-player.y-camera.y,
-player.w,
-player.h
+px+6,
+py+18,
+22,
+18
+);
+
+ctx.fillStyle=saveData.pants;
+
+ctx.fillRect(
+px+8,
+py+36,
+8,
+14
+);
+
+ctx.fillRect(
+px+18,
+py+36,
+8,
+14
 );
 
 ctx.fillStyle="white";
-ctx.font="18px Arial";
 
 ctx.fillText(
-"Trainer",
-player.x-camera.x-10,
-player.y-camera.y-10
+saveData.name,
+px-10,
+py-10
 );
+
+}
+
+function drawPyrox(){
+
+const px=pyrox.x-camera.x;
+const py=pyrox.y-camera.y;
+
+ctx.fillStyle="#ff8c1a";
+
+ctx.beginPath();
+ctx.ellipse(
+px,
+py,
+18,
+12,
+0,
+0,
+Math.PI*2
+);
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(
+px+12,
+py-10,
+9,
+0,
+Math.PI*2
+);
+ctx.fill();
+
+ctx.fillStyle="#cc6600";
+
+ctx.beginPath();
+ctx.moveTo(px+8,py-16);
+ctx.lineTo(px+14,py-28);
+ctx.lineTo(px+18,py-12);
+ctx.fill();
+
+ctx.beginPath();
+ctx.moveTo(px+18,py-16);
+ctx.lineTo(px+25,py-28);
+ctx.lineTo(px+28,py-10);
+ctx.fill();
+
+ctx.fillStyle="white";
+
+ctx.beginPath();
+ctx.arc(
+px+14,
+py-11,
+2,
+0,
+Math.PI*2
+);
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(
+px+22,
+py-11,
+2,
+0,
+Math.PI*2
+);
+ctx.fill();
+
+const flameSize=
+8+
+Math.sin(pyrox.flameFrame)*3;
+
+ctx.fillStyle="orange";
+
+ctx.beginPath();
+ctx.arc(
+px-18,
+py,
+flameSize,
+0,
+Math.PI*2
+);
+ctx.fill();
+
+ctx.fillStyle="yellow";
+
+ctx.beginPath();
+ctx.arc(
+px-18,
+py,
+flameSize/2,
+0,
+Math.PI*2
+);
+ctx.fill();
+
+ctx.fillStyle="white";
+
+ctx.fillText(
+"Pyrox",
+px-15,
+py-22
+);
+
+}
+
+function drawNPCs(){
+
+for(let npc of npcs){
+
+const x=npc.x-camera.x;
+const y=npc.y-camera.y;
+
+ctx.fillStyle="#2266ff";
+
+ctx.beginPath();
+ctx.arc(
+x+14,
+y+12,
+10,
+0,
+Math.PI*2
+);
+ctx.fill();
+
+ctx.fillRect(
+x+4,
+y+22,
+20,
+20
+);
+
+}
+
+}
+function drawWorld(){
+
+ctx.fillStyle="#5fbf5f";
+
+ctx.fillRect(
+-camera.x,
+-camera.y,
+5000,
+4000
+);
+
+drawTrees();
+drawHouses();
+drawNPCs();
+drawPyrox();
+drawPlayer();
 
 }
 
@@ -290,44 +938,22 @@ canvas.width,
 canvas.height
 );
 
+if(!gameStarted){
+return;
+}
+
 drawWorld();
-drawPlayer();
 
 ctx.fillStyle="white";
-ctx.font="22px Arial";
+ctx.font="20px Arial";
 
 ctx.fillText(
 "Oakwind Village",
 20,
-30
-);
-
-ctx.font="16px Arial";
-
-ctx.fillText(
-"Move with joystick",
-20,
-55
-);
-
-ctx.fillText(
-"Press E near NPCs",
-20,
-80
+canvas.height-20
 );
 
 }
-
-function loop(){
-
-update();
-render();
-
-requestAnimationFrame(loop);
-
-}
-
-loop();
 
 const joy=document.getElementById("joy");
 const stick=document.getElementById("stick");
@@ -340,14 +966,20 @@ joy.addEventListener("touchmove",e=>{
 
 e.preventDefault();
 
-const rect=joy.getBoundingClientRect();
+const rect=
+joy.getBoundingClientRect();
 
-const touch=e.touches[0];
+const touch=
+e.touches[0];
 
-let x=touch.clientX-rect.left-60;
-let y=touch.clientY-rect.top-60;
+let x=
+touch.clientX-rect.left-60;
 
-const dist=Math.sqrt(x*x+y*y);
+let y=
+touch.clientY-rect.top-60;
+
+const dist=
+Math.sqrt(x*x+y*y);
 
 if(dist>40){
 
@@ -356,8 +988,11 @@ y=y/dist*40;
 
 }
 
-stick.style.left=(x+40)+"px";
-stick.style.top=(y+40)+"px";
+stick.style.left=
+(x+40)+"px";
+
+stick.style.top=
+(y+40)+"px";
 
 moveX=x/10;
 moveY=y/10;
@@ -373,19 +1008,70 @@ stick.style.left="40px";
 stick.style.top="40px";
 
 });
-window.addEventListener("touchmove",e=>{
-e.preventDefault();
-},{passive:false});
 
-window.addEventListener("touchstart",e=>{
-e.preventDefault();
-},{passive:false});
+function loop(){
 
-window.addEventListener("touchend",e=>{
-e.preventDefault();
-},{passive:false});
+update();
+render();
 
-showDialog("Welcome to Legends of Aetheria!");
+requestAnimationFrame(loop);
+
+}
+
+loop();
+
+window.addEventListener(
+"touchmove",
+e=>{
+e.preventDefault();
+},
+{passive:false}
+);
+
+/*
+window.addEventListener(
+"touchstart",
+e=>{
+e.preventDefault();
+},
+{passive:false}
+);
+
+window.addEventListener(
+"touchend",
+e=>{
+e.preventDefault();
+},
+{passive:false}
+);
+*/ 
+document.getElementById("moneyText").innerText=
+"₳"+saveData.money;
+
+document.getElementById("orbText").innerText=
+"Nova Orbs: "+saveData.orbs;
+
+showDialog(
+"Welcome to Aetheria, "+saveData.name+"!"
+);
+
+setTimeout(()=>{
+
+showDialog(
+"Objective: Visit Professor Cedar"
+);
+
+},4000);
+
+document.getElementById("menuBtn").onclick=()=>{
+
+showDialog(
+"Menu system coming in Update 3"
+);
+
+};
+
+ctx.imageSmoothingEnabled=true;
 
 </script>
 
