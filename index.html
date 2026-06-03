@@ -666,15 +666,15 @@ y,
 ctx.fillStyle="#1f7a1f";
 
 ctx.beginPath();
+ctx.arc(x-10,y,18,0,Math.PI*2);
+ctx.fill();
 
-ctx.arc(
-x,
-y,
-24,
-0,
-Math.PI*2
-);
+ctx.beginPath();
+ctx.arc(x+10,y,18,0,Math.PI*2);
+ctx.fill();
 
+ctx.beginPath();
+ctx.arc(x,y-12,18,0,Math.PI*2);
 ctx.fill();
 
 }
@@ -1028,13 +1028,52 @@ ctx.fillRect(
 4000
 );
 
+ctx.fillStyle="#c2a06d";
+
+ctx.fillRect(
+0-camera.x,
+450-camera.y,
+1200,
+120
+);
+
+ctx.fillRect(
+450-camera.x,
+250-camera.y,
+120,
+600
+);
+ctx.fillStyle="#8b5a2b";
+
+for(let i=0;i<15;i++){
+
+ctx.fillRect(
+100+i*60-camera.x,
+200-camera.y,
+8,
+40
+);
+
+}
 drawTrees();
 drawGrass();
 drawHouses();
 drawNPCs();
 drawPyrox();
 drawPlayer();
+ctx.fillStyle="#3a86ff";
 
+ctx.beginPath();
+
+ctx.arc(
+1600-camera.x,
+700-camera.y,
+180,
+0,
+Math.PI*2
+);
+
+ctx.fill();
 }
 
 function render(){
