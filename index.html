@@ -356,7 +356,10 @@ Menu
 
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
+const grassImg=new Image();
 
+grassImg.src=
+"https://i.imgur.com/9z6qR8R.png";
 function resize(){
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
@@ -1035,14 +1038,21 @@ showDialog(
 
 function drawWorld(){
 
-ctx.fillStyle="#5fbf5f";
+for(let x=0;x<5000;x+=64){
 
-ctx.fillRect(
--camera.x,
--camera.y,
-5000,
-4000
+for(let y=0;y<4000;y+=64){
+
+ctx.drawImage(
+grassImg,
+x-camera.x,
+y-camera.y,
+64,
+64
 );
+
+}
+
+}
 
 ctx.fillStyle="#c2a06d";
 
