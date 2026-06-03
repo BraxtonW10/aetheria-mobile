@@ -597,7 +597,7 @@ showDialog(
 );
 
 document.getElementById("questBox").innerText=
-"Objective: Reach Verdant Forest";
+"Objective: Travel east to Verdant Forest";
 
 }else{
 
@@ -644,7 +644,7 @@ pyrox.y+=
 ((player.y+40)-pyrox.y)*0.08;
 
 pyrox.flameFrame+=0.15;
-
+checkWildEncounter();
 }
 
 function drawTrees(){
@@ -913,10 +913,24 @@ y+22,
 const grassPatches=[
 
 {
-x:1200,
+x:600,
+y:450,
+w:250,
+h:200
+},
+
+{
+x:900,
 y:500,
-w:500,
-h:350
+w:300,
+h:250
+},
+
+{
+x:1300,
+y:550,
+w:400,
+h:300
 },
 
 {
@@ -1015,6 +1029,7 @@ ctx.fillRect(
 );
 
 drawTrees();
+drawGrass();
 drawHouses();
 drawNPCs();
 drawPyrox();
