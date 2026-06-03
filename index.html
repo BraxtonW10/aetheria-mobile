@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Legends of Aetheria</title>
+
 <style>
 html,body{
 margin:0;
@@ -12,29 +13,29 @@ overflow:hidden;
 background:#000;
 font-family:Arial,sans-serif;
 }
+
 canvas{
 display:block;
-width:100vw;
-height:100vh;
 touch-action:none;
 }
-#ui{
+
+#dialog{
 position:fixed;
-left:0;
-bottom:0;
-width:100%;
-pointer-events:none;
-}
-#dialogue{
-display:none;
-margin:20px;
-padding:15px;
-border-radius:12px;
+left:50%;
+bottom:20px;
+transform:translateX(-50%);
+width:90%;
+max-width:700px;
 background:rgba(0,0,0,.85);
 color:white;
+padding:15px;
+border-radius:12px;
+display:none;
 font-size:18px;
+z-index:100;
 }
-#joystick{
+
+#joy{
 position:fixed;
 left:20px;
 bottom:20px;
@@ -42,7 +43,9 @@ width:120px;
 height:120px;
 border-radius:50%;
 background:rgba(255,255,255,.15);
+z-index:100;
 }
+
 #stick{
 position:absolute;
 left:40px;
@@ -55,51 +58,72 @@ background:white;
 </style>
 </head>
 <body>
-<div id="ui">
-<div id="dialogue"></div>
-</div>
-<div id="joystick">
+
+<canvas id="game"></canvas>
+
+<div id="dialog"></div>
+
+<div id="joy">
 <div id="stick"></div>
 </div>
+
 <script>
+
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
+
 function resize(){
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 }
 resize();
 window.addEventListener("resize",resize);
-const dialogue=document.getElementById("dialogue");
+
+const dialog=document.getElementById("dialog");
+
 const player={
 x:400,
 y:300,
-size:32,
-speed:3
+w:32,
+h:32,
+speed:3,
+color:"#ff5533"
 };
+
 const camera={
 x:0,
 y:0
 };
-const keys={};
-window.addEventListener("keydown",e=>{
-keys[e.key.toLowerCase()]=true;
-if(e.key==="e"){
-interact();
+
+let moveX=0;
+let moveY=0;
+
+function showDialog(text){
+dialog.innerText=text;
+dialog.style.display="block";
+
+setTimeout(()=>{
+dialog.style.display="none";
+},3000);
 }
-});
-window.addEventListener("keyup",e=>{
-keys[e.key.toLowerCase()]=false;
-});
-const buildings=[
+
+const houses=[
 {
 x:700,
-y:350,
+y:300,
 w:180,
 h:140,
 name:"Professor Cedar Lab"
+},
+{
+x:250,
+y:500,
+w:160,
+h:120,
+name:"Your House"
 }
 ];
+
 const npcs=[
 {
 x:520,
@@ -107,89 +131,126 @@ y:420,
 text:"Welcome to Oakwind Village!"
 },
 {
-x:780,
+x:850,
 y:520,
 text:"Professor Cedar is waiting for you."
 }
 ];
+
 const trees=[];
-for(let i=0;i<60;i++){
+
+for(let i=0;i<80;i++){
 trees.push({
 x:Math.random()*2500,
 y:Math.random()*1800
 });
 }
-function showDialogue(text){
-dialogue.innerText=text;
-dialogue.style.display="block";
-setTimeout(()=>{
-dialogue.style.display="none";
-},3000);
-}
 function interact(){
+
 for(let npc of npcs){
+
 const dx=player.x-npc.x;
 const dy=player.y-npc.y;
 const dist=Math.sqrt(dx*dx+dy*dy);
+
 if(dist<80){
-showDialogue(npc.text);
+showDialog(npc.text);
 return;
 }
 }
-for(let b of buildings){
-const dx=player.x-(b.x+b.w/2);
-const dy=player.y-(b.y+b.h/2);
+
+for(let house of houses){
+
+const cx=house.x+house.w/2;
+const cy=house.y+house.h/2;
+
+const dx=player.x-cx;
+const dy=player.y-cy;
+
 const dist=Math.sqrt(dx*dx+dy*dy);
-if(dist<150){
-showDialogue("You entered "+b.name);
+
+if(dist<140){
+showDialog("Entered "+house.name);
 return;
 }
 }
 }
-function update(){
-let speed=player.speed;
-if(keys["shift"]){
-speed=6;
+
+window.addEventListener("keydown",e=>{
+
+if(e.key==="e"){
+interact();
 }
-if(keys["w"]) player.y-=speed;
-if(keys["s"]) player.y+=speed;
-if(keys["a"]) player.x-=speed;
-if(keys["d"]) player.x+=speed;
+
+});
+
+function update(){
+
+player.x+=moveX;
+player.y+=moveY;
+
 camera.x=player.x-canvas.width/2;
 camera.y=player.y-canvas.height/2;
+
+if(player.x<0) player.x=0;
+if(player.y<0) player.y=0;
+
+if(player.x>3000) player.x=3000;
+if(player.y>2000) player.y=2000;
+
 }
+
 function drawWorld(){
-ctx.fillStyle="#4da64d";
-ctx.fillRect(0,0,3000,2000);
-for(let t of trees){
+
+ctx.fillStyle="#4caf50";
+ctx.fillRect(
+-camera.x,
+-camera.y,
+3000,
+2000
+);
+
+for(let tree of trees){
+
 ctx.fillStyle="#145214";
+
 ctx.beginPath();
 ctx.arc(
-t.x-camera.x,
-t.y-camera.y,
+tree.x-camera.x,
+tree.y-camera.y,
 25,
 0,
 Math.PI*2
 );
+
 ctx.fill();
 }
-for(let b of buildings){
+
+for(let house of houses){
+
 ctx.fillStyle="#c28c52";
+
 ctx.fillRect(
-b.x-camera.x,
-b.y-camera.y,
-b.w,
-b.h
+house.x-camera.x,
+house.y-camera.y,
+house.w,
+house.h
 );
+
 ctx.fillStyle="black";
+ctx.font="16px Arial";
+
 ctx.fillText(
-b.name,
-b.x-camera.x+10,
-b.y-camera.y+20
+house.name,
+house.x-camera.x+10,
+house.y-camera.y+20
 );
 }
+
 for(let npc of npcs){
+
 ctx.fillStyle="blue";
+
 ctx.fillRect(
 npc.x-camera.x,
 npc.y-camera.y,
@@ -199,65 +260,134 @@ npc.y-camera.y,
 }
 }
 function drawPlayer(){
-ctx.fillStyle="#ff5533";
+
+ctx.fillStyle=player.color;
+
 ctx.fillRect(
 player.x-camera.x,
 player.y-camera.y,
-player.size,
-player.size
+player.w,
+player.h
 );
+
 ctx.fillStyle="white";
+ctx.font="18px Arial";
+
 ctx.fillText(
-"Pyrox Trainer",
-player.x-camera.x-15,
+"Trainer",
+player.x-camera.x-10,
 player.y-camera.y-10
 );
+
 }
+
 function render(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
 drawWorld();
 drawPlayer();
+
 ctx.fillStyle="white";
-ctx.font="20px Arial";
+ctx.font="22px Arial";
+
 ctx.fillText(
 "Oakwind Village",
 20,
 30
 );
+
+ctx.font="16px Arial";
+
 ctx.fillText(
-"Press E to interact",
+"Move with joystick",
 20,
-60
+55
 );
+
+ctx.fillText(
+"Press E near NPCs",
+20,
+80
+);
+
 }
+
 function loop(){
+
 update();
 render();
+
 requestAnimationFrame(loop);
+
 }
+
 loop();
-let joy=document.getElementById("joystick");
-let stick=document.getElementById("stick");
-let active=false;
-joy.addEventListener("touchstart",()=>{
-active=true;
+
+const joy=document.getElementById("joy");
+const stick=document.getElementById("stick");
+
+joy.addEventListener("touchstart",e=>{
+e.preventDefault();
 });
-joy.addEventListener("touchend",()=>{
-active=false;
-stick.style.left="40px";
-stick.style.top="40px";
-});
-joy.addEventListener("touchmove",(e)=>{
-if(!active)return;
+
+joy.addEventListener("touchmove",e=>{
+
+e.preventDefault();
+
 const rect=joy.getBoundingClientRect();
+
 const touch=e.touches[0];
-const x=touch.clientX-rect.left-60;
-const y=touch.clientY-rect.top-60;
+
+let x=touch.clientX-rect.left-60;
+let y=touch.clientY-rect.top-60;
+
+const dist=Math.sqrt(x*x+y*y);
+
+if(dist>40){
+
+x=x/dist*40;
+y=y/dist*40;
+
+}
+
 stick.style.left=(x+40)+"px";
 stick.style.top=(y+40)+"px";
-player.x+=x*0.05;
-player.y+=y*0.05;
+
+moveX=x/10;
+moveY=y/10;
+
 });
+
+joy.addEventListener("touchend",()=>{
+
+moveX=0;
+moveY=0;
+
+stick.style.left="40px";
+stick.style.top="40px";
+
+});
+window.addEventListener("touchmove",e=>{
+e.preventDefault();
+},{passive:false});
+
+window.addEventListener("touchstart",e=>{
+e.preventDefault();
+},{passive:false});
+
+window.addEventListener("touchend",e=>{
+e.preventDefault();
+},{passive:false});
+
+showDialog("Welcome to Legends of Aetheria!");
+
 </script>
+
 </body>
 </html>
