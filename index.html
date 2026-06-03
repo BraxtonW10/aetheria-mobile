@@ -910,6 +910,101 @@ y+22,
 }
 
 }
+}
+ 
+const grassPatches=[
+
+{
+x:1200,
+y:500,
+w:500,
+h:350
+},
+
+{
+x:1850,
+y:800,
+w:400,
+h:300
+}
+
+];
+
+let encounterCooldown=0;
+
+const wildAetherons=[
+
+"Leaflet",
+"Twigowl",
+"Mosscub",
+"Budfinch",
+"Floroot"
+
+];
+
+function drawGrass(){
+
+for(let g of grassPatches){
+
+ctx.fillStyle="#3f9b3f";
+
+ctx.fillRect(
+g.x-camera.x,
+g.y-camera.y,
+g.w,
+g.h
+);
+
+}
+
+}
+
+function checkWildEncounter(){
+
+if(encounterCooldown>0){
+
+encounterCooldown--;
+return;
+
+}
+
+for(let g of grassPatches){
+
+if(
+player.x>g.x &&
+player.x<g.x+g.w &&
+player.y>g.y &&
+player.y<g.y+g.h
+){
+
+if(Math.random()<0.003){
+
+encounterCooldown=300;
+startWildBattle();
+
+}
+
+}
+
+}
+
+}
+
+function startWildBattle(){
+
+const wildName=
+wildAetherons[
+Math.floor(
+Math.random()*wildAetherons.length
+)
+];
+
+showDialog(
+"Wild "+wildName+" appeared!"
+);
+
+}
+
 function drawWorld(){
 
 ctx.fillStyle="#5fbf5f";
