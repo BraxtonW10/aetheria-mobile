@@ -405,7 +405,55 @@ const dialog=document.getElementById("dialog");
 let gameStarted=false;
 
 const saveData={
+const previewCanvas =
+document.getElementById("previewCanvas");
 
+const previewCtx =
+previewCanvas.getContext("2d");
+
+function drawPreview(){
+
+previewCtx.clearRect(
+0,0,
+previewCanvas.width,
+previewCanvas.height
+);
+
+const x=55;
+const y=40;
+
+// head
+previewCtx.fillStyle=saveData.skin;
+previewCtx.beginPath();
+previewCtx.arc(x+15,y+15,18,0,Math.PI*2);
+previewCtx.fill();
+
+// hair
+previewCtx.fillStyle=saveData.hair;
+previewCtx.beginPath();
+previewCtx.arc(x+15,y+10,18,Math.PI,0);
+previewCtx.fill();
+
+// shirt
+previewCtx.fillStyle=saveData.shirt;
+previewCtx.fillRect(x,y+32,30,40);
+
+// arms
+previewCtx.fillStyle=saveData.skin;
+previewCtx.fillRect(x-8,y+35,8,28);
+previewCtx.fillRect(x+30,y+35,8,28);
+
+// pants
+previewCtx.fillStyle=saveData.pants;
+previewCtx.fillRect(x+2,y+72,12,30);
+previewCtx.fillRect(x+16,y+72,12,30);
+
+// shoes
+previewCtx.fillStyle="black";
+previewCtx.fillRect(x,y+102,14,6);
+previewCtx.fillRect(x+16,y+102,14,6);
+
+}
 name:"Trainer",
 
 hair:"#000000",
@@ -757,24 +805,25 @@ ctx.fill();
 
 // hair
 ctx.fillStyle=saveData.hair;
-ctx.beginPath();
-ctx.arc(px+17,py+9,10,Math.PI,0);
-ctx.fill();
+saveData.hair=
+btn.dataset.hair;
+
+drawPreview();
 
 // shirt
 ctx.fillStyle=saveData.shirt;
 ctx.fillRect(px+7,py+20,20,16);
-
+drawPreview();
 // arms
 ctx.fillStyle=saveData.skin;
 ctx.fillRect(px+4,py+22,3,12);
 ctx.fillRect(px+27,py+22,3,12);
-
+drawPreview();
 // legs
 ctx.fillStyle=saveData.pants;
 ctx.fillRect(px+9,py+36,7,14);
 ctx.fillRect(px+18,py+36,7,14);
-
+drawPreview();
 // shoes
 ctx.fillStyle="black";
 ctx.fillRect(px+8,py+48,8,3);
@@ -1235,7 +1284,7 @@ showDialog(
 };
 
 ctx.imageSmoothingEnabled=true;
-
+drawPreview();
 </script>
 
 </body>
