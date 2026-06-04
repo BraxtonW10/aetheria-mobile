@@ -360,7 +360,10 @@ const grassImg = new Image();
 grassImg.src = "assets/grass.png";
 
 const treeImages=[];
-
+const houseImg = new Image();
+houseImg.src = "assets/house.png";
+const pathImg = new Image();
+pathImg.src = "assets/path1.png";
 for(let i=1;i<=3;i++){
 
 const img=new Image();
@@ -703,22 +706,12 @@ function drawHouses(){
 
 for(let house of houses){
 
-ctx.fillStyle="#c98b4a";
-
-ctx.fillRect(
-house.x-camera.x,
-house.y-camera.y,
-house.w,
-house.h
-);
-
-ctx.fillStyle="#8b0000";
-
-ctx.fillRect(
-house.x-camera.x,
-house.y-camera.y,
-house.w,
-40
+ctx.drawImage(
+houseImg,
+house.x - camera.x,
+house.y - camera.y - 80,
+220,
+220
 );
 
 ctx.fillStyle="black";
@@ -1052,8 +1045,6 @@ y-camera.y,
 
 }
 
-const pathImg = new Image();
-pathImg.src = "assets/path1.png";
 
 ctx.drawImage(
 pathImg,
