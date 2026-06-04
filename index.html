@@ -732,62 +732,47 @@ function drawPlayer(){
 const px=player.x-camera.x;
 const py=player.y-camera.y;
 
+// shadow
+ctx.fillStyle="rgba(0,0,0,0.25)";
+ctx.beginPath();
+ctx.ellipse(px+17,py+52,12,5,0,0,Math.PI*2);
+ctx.fill();
+
+// head
 ctx.fillStyle=saveData.skin;
-
 ctx.beginPath();
-ctx.arc(
-px+17,
-py+10,
-10,
-0,
-Math.PI*2
-);
+ctx.arc(px+17,py+12,10,0,Math.PI*2);
 ctx.fill();
 
+// hair
 ctx.fillStyle=saveData.hair;
-
 ctx.beginPath();
-ctx.arc(
-px+17,
-py+7,
-10,
-Math.PI,
-0
-);
+ctx.arc(px+17,py+9,10,Math.PI,0);
 ctx.fill();
 
+// shirt
 ctx.fillStyle=saveData.shirt;
+ctx.fillRect(px+7,py+20,20,16);
 
-ctx.fillRect(
-px+6,
-py+18,
-22,
-18
-);
+// arms
+ctx.fillStyle=saveData.skin;
+ctx.fillRect(px+4,py+22,3,12);
+ctx.fillRect(px+27,py+22,3,12);
 
+// legs
 ctx.fillStyle=saveData.pants;
+ctx.fillRect(px+9,py+36,7,14);
+ctx.fillRect(px+18,py+36,7,14);
 
-ctx.fillRect(
-px+8,
-py+36,
-8,
-14
-);
+// shoes
+ctx.fillStyle="black";
+ctx.fillRect(px+8,py+48,8,3);
+ctx.fillRect(px+18,py+48,8,3);
 
-ctx.fillRect(
-px+18,
-py+36,
-8,
-14
-);
-
+// name
 ctx.fillStyle="white";
-
-ctx.fillText(
-saveData.name,
-px-10,
-py-10
-);
+ctx.font="20px Arial";
+ctx.fillText(saveData.name,px-15,py-12);
 
 }
 
