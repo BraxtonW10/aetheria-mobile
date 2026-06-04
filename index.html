@@ -677,23 +677,27 @@ checkWildEncounter();
 
 function drawTrees(){
 
-for(let i=0;i<trees.length;i++){
-
-const tree=trees[i];
+for(let tree of trees){
 
 const x=tree.x-camera.x;
 const y=tree.y-camera.y;
 
-const img=
-treeImages[i%treeImages.length];
+ctx.fillStyle="#6b4f2a";
+ctx.fillRect(x-8,y,16,30);
 
-ctx.drawImage(
-img,
-x-32,
-y-64,
-64,
-64
-);
+ctx.fillStyle="#1f7a1f";
+
+ctx.beginPath();
+ctx.arc(x,y-15,25,0,Math.PI*2);
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(x-18,y,18,0,Math.PI*2);
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(x+18,y,18,0,Math.PI*2);
+ctx.fill();
 
 }
 
