@@ -982,9 +982,8 @@ function drawGrass(){
 
 for(let g of grassPatches){
 
-ctx.fillStyle="#3f9b3f";
-
-ctx.fillRect(
+ctx.drawImage(
+grassImg,
 g.x-camera.x,
 g.y-camera.y,
 g.w,
@@ -1062,14 +1061,16 @@ y-camera.y,
 const pathImg = new Image();
 pathImg.src = "assets/path.png";
 
-ctx.fillRect(
+ctx.drawImage(
+pathImg,
 0-camera.x,
 450-camera.y,
 1200,
 120
 );
 
-ctx.fillRect(
+ctx.drawImage(
+pathImg,
 450-camera.x,
 250-camera.y,
 120,
