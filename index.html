@@ -766,7 +766,11 @@ function update(){
 if(!gameStarted)return;
 player.x += moveX;
 player.y += moveY;
+camera.x =
+player.x - canvas.width / 2;
 
+camera.y =
+player.y - canvas.height / 2;
 if(player.x<0)player.x=0;
 if(player.y<0)player.y=0;
 
