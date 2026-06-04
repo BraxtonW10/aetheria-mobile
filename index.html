@@ -464,11 +464,19 @@ newGameBtn.onclick=()=>{
 titleScreen.style.display="none";
 creator.style.display="block";
 
+drawPreview();
+
 };
 startAdventureBtn.onclick=()=>{
 
 saveData.name=
 document.getElementById("playerName").value || "Trainer";
+
+document.getElementById("moneyText").innerText=
+"₳"+saveData.money;
+
+document.getElementById("orbText").innerText=
+"Nova Orbs: "+saveData.orbs;
 
 creator.style.display="none";
 
@@ -511,12 +519,16 @@ drawPreview();
 
 });
 
+drawPreview();
+
 document.querySelectorAll("[data-shirt]").forEach(btn=>{
 
 btn.onclick=()=>{
 
 saveData.shirt=
 btn.dataset.shirt;
+
+drawPreview();
 
 };
 
@@ -528,6 +540,8 @@ btn.onclick=()=>{
 
 saveData.pants=
 btn.dataset.pants;
+
+drawPreview();
 
 };
 
@@ -793,8 +807,15 @@ ctx.beginPath();
 ctx.arc(px+17,py+12,10,0,Math.PI*2);
 ctx.fill();
 
+// eyes
+ctx.fillStyle="black";
+ctx.fillRect(px+13,py+10,2,2);
+ctx.fillRect(px+19,py+10,2,2);
 // hair
 ctx.fillStyle=saveData.hair;
+ctx.beginPath();
+ctx.arc(px+17,py+9,10,Math.PI,0);
+ctx.fill();
 
 // shirt
 ctx.fillStyle=saveData.shirt;
