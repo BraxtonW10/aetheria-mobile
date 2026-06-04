@@ -1257,9 +1257,11 @@ e.preventDefault();
 );
 
 window.addEventListener(
-"touchend",
+"touchmove",
 e=>{
+if(gameStarted){
 e.preventDefault();
+}
 },
 {passive:false}
 );
