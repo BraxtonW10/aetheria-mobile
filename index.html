@@ -356,8 +356,6 @@ Menu
 
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
-const grassImg=new Image();
-grassImg.src="assets/grass.png";
 
 const treeImages=[];
 
@@ -370,22 +368,7 @@ img.src="assets/tree"+i+".png";
 treeImages.push(img);
 
 }
-function drawGrass(){
 
-for(let g of grassPatches){
-
-ctx.fillStyle="#3f9b3f";
-
-ctx.fillRect(
-g.x-camera.x,
-g.y-camera.y,
-g.w,
-g.h
-);
-
-}
-
-}
 function resize(){
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
@@ -1068,8 +1051,9 @@ for(let x=0;x<5000;x+=64){
 
 for(let y=0;y<4000;y+=64){
 
-ctx.drawImage(
-grassImg,
+ctx.fillStyle="#6dbf5f";
+
+ctx.fillRect(
 x-camera.x,
 y-camera.y,
 64,
