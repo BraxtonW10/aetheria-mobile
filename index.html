@@ -1181,7 +1181,7 @@ joy.addEventListener("touchstart",e=>{
 e.preventDefault();
 });
 
-joy.addEventListener("touchmove",e=>{
+joy.joy.addEventListener("touchmove",e=>{
 
 e.preventDefault();
 
@@ -1242,7 +1242,9 @@ loop();
 window.addEventListener(
 "touchmove",
 e=>{
+if(gameStarted){
 e.preventDefault();
+}
 },
 {passive:false}
 );
