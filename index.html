@@ -767,6 +767,12 @@ if(!gameStarted)return;
 player.x += moveX;
 player.y += moveY;
 
+if(player.x<0)player.x=0;
+if(player.y<0)player.y=0;
+
+if(player.x>4000)player.x=4000;
+if(player.y>3000)player.y=3000;
+
 saveData.x = player.x;
 saveData.y = player.y;
 
@@ -774,17 +780,6 @@ localStorage.setItem(
 "aetheriaSave",
 JSON.stringify(saveData)
 );
-camera.x=
-player.x-canvas.width/2;
-
-camera.y=
-player.y-canvas.height/2;
-
-if(player.x<0)player.x=0;
-if(player.y<0)player.y=0;
-
-if(player.x>4000)player.x=4000;
-if(player.y>3000)player.y=3000;
 
 pyrox.x+=
 ((player.x-50)-pyrox.x)*0.08;
