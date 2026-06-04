@@ -764,6 +764,9 @@ interact;
 function update(){
 
 if(!gameStarted)return;
+player.x += moveX;
+player.y += moveY;
+
 saveData.x = player.x;
 saveData.y = player.y;
 
@@ -771,9 +774,6 @@ localStorage.setItem(
 "aetheriaSave",
 JSON.stringify(saveData)
 );
-player.x+=moveX;
-player.y+=moveY;
-
 camera.x=
 player.x-canvas.width/2;
 
