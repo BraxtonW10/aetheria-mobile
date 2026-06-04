@@ -223,7 +223,7 @@ A Monster Catching Adventure
 New Game
 </button>
 
-<button class="menuBtn">
+<button class="menuBtn" id="continueBtn">
 Continue
 </button>
 
@@ -399,6 +399,7 @@ const gameUI=document.getElementById("gameUI");
 
 const newGameBtn=document.getElementById("newGameBtn");
 const startAdventureBtn=document.getElementById("startAdventureBtn");
+const continueBtn=document.getElementById("continueBtn");
 
 const dialog=document.getElementById("dialog");
 
@@ -413,7 +414,9 @@ const saveData={
   pants:"#222222",
   money:1000,
   orbs:5,
-  quest:"Visit Professor Cedar"
+  quest:"Visit Professor Cedar",
+  x:500,
+  y:500
 };
 
 const previewCanvas =
@@ -488,8 +491,52 @@ document.getElementById("menuBtn").style.display="block";
 
 gameStarted=true;
 
+localStorage.setItem(
+"aetheriaSave",
+JSON.stringify(saveData)
+);
+
 showDialog(
 "Mom: Professor Cedar is looking for you!"
+);
+};
+continueBtn.onclick=()=>{
+
+const save =
+localStorage.getItem("aetheriaSave");
+
+if(!save){
+
+showDialog("No save file found.");
+return;
+
+}
+
+Object.assign(
+saveData,
+JSON.parse(save)
+);
+
+player.x = saveData.x;
+player.y = saveData.y;
+
+titleScreen.style.display="none";
+gameUI.style.display="block";
+
+document.getElementById("joy").style.display="block";
+document.getElementById("interactBtn").style.display="block";
+document.getElementById("menuBtn").style.display="block";
+
+document.getElementById("moneyText").innerText=
+"₳"+saveData.money;
+
+document.getElementById("orbText").innerText=
+"Nova Orbs: "+saveData.orbs;
+
+gameStarted=true;
+
+showDialog(
+"Welcome back, "+saveData.name+"!"
 );
 
 };
@@ -717,7 +764,13 @@ interact;
 function update(){
 
 if(!gameStarted)return;
+saveData.x = player.x;
+saveData.y = player.y;
 
+localStorage.setItem(
+"aetheriaSave",
+JSON.stringify(saveData)
+);
 player.x+=moveX;
 player.y+=moveY;
 
@@ -790,6 +843,107 @@ house.y - camera.y + 150
 }
 
 }
+function drawPyrox(){
+
+const px=pyrox.x-camera.x;
+const py=pyrox.y-camera.y;
+
+const flame=
+8+Math.sin(pyrox.flameFrame)*3;
+
+// tail flame
+ctx.fillStyle="orange";
+ctx.beginPath();
+ctx.arc(px-20,py+2,flame,0,Math.PI*2);
+ctx.fill();
+
+ctx.fillStyle="yellow";
+ctx.beginPath();
+ctx.arc(px-20,py+2,flame/2,0,Math.PI*2);
+ctx.fill();
+
+// body
+ctx.fillStyle="#ff8c1a";
+ctx.beginPath();
+ctx.ellipse(px,py,22,14,0,0,Math.PI*2);
+ctx.fill();
+
+// belly
+ctx.fillStyle="#ffe5b4";
+ctx.beginPath();
+ctx.ellipse(px+2,py+2,10,7,0,0,Math.PI*2);
+ctx.fill();
+
+// head
+ctx.fillStyle="#ff8c1a";
+ctx.beginPath();
+ctx.arc(px+16,py-10,12,0,Math.PI*2);
+ctx.fill();
+
+// eye
+ctx.fillStyle="white";
+ctx.beginPath();
+ctx.arc(px+20,py-13,3,0,Math.PI*2);
+ctx.fill();
+
+ctx.fillStyle="black";
+ctx.beginPath();
+ctx.arc(px+20,py-13,1.5,0,Math.PI*2);
+ctx.fill();
+
+// legs
+ctx.fillStyle="#cc6600";
+ctx.fillRect(px-10,py+8,5,8);
+ctx.fillRect(px+4,py+8,5,8);
+
+// name
+ctx.fillStyle="white";
+ctx.font="16px Arial";
+ctx.fillText("Pyrox",px-18,py-24);
+
+}
+function drawNPCs(){
+
+for(let npc of npcs){
+
+const x=npc.x-camera.x;
+const y=npc.y-camera.y;
+
+// shadow
+ctx.fillStyle="rgba(0,0,0,0.25)";
+ctx.beginPath();
+ctx.ellipse(x+14,y+44,10,4,0,0,Math.PI*2);
+ctx.fill();
+
+// head
+ctx.fillStyle="#f2d2b6";
+ctx.beginPath();
+ctx.arc(x+14,y+10,8,0,Math.PI*2);
+ctx.fill();
+
+// hair
+ctx.fillStyle="#4a2c1d";
+ctx.beginPath();
+ctx.arc(x+14,y+8,8,Math.PI,0);
+ctx.fill();
+
+// body
+ctx.fillStyle="#2266ff";
+ctx.fillRect(x+6,y+18,16,18);
+
+// arms
+ctx.fillStyle="#f2d2b6";
+ctx.fillRect(x+3,y+20,3,10);
+ctx.fillRect(x+22,y+20,3,10);
+
+// legs
+ctx.fillStyle="#222";
+ctx.fillRect(x+8,y+36,5,10);
+ctx.fillRect(x+15,y+36,5,10);
+
+}
+
+}
 function drawPlayer(){
 
 const px=player.x-camera.x;
@@ -843,151 +997,7 @@ ctx.fillText(saveData.name,px-15,py-12);
 
 }
 
-function drawPyrox(){
 
-const px=pyrox.x-camera.x;
-const py=pyrox.y-camera.y;
-
-ctx.fillStyle="#ff8c1a";
-
-ctx.beginPath();
-ctx.ellipse(
-px,
-py,
-18,
-12,
-0,
-0,
-Math.PI*2
-);
-ctx.fill();
-
-ctx.beginPath();
-ctx.arc(
-px+12,
-py-10,
-9,
-0,
-Math.PI*2
-);
-ctx.fill();
-
-ctx.fillStyle="#cc6600";
-
-ctx.beginPath();
-ctx.moveTo(px+8,py-16);
-ctx.lineTo(px+14,py-28);
-ctx.lineTo(px+18,py-12);
-ctx.fill();
-
-ctx.beginPath();
-ctx.moveTo(px+18,py-16);
-ctx.lineTo(px+25,py-28);
-ctx.lineTo(px+28,py-10);
-ctx.fill();
-
-ctx.fillStyle="white";
-
-ctx.beginPath();
-ctx.arc(
-px+14,
-py-11,
-2,
-0,
-Math.PI*2
-);
-ctx.fill();
-
-ctx.beginPath();
-ctx.arc(
-px+22,
-py-11,
-2,
-0,
-Math.PI*2
-);
-ctx.fill();
-
-const flameSize=
-8+
-Math.sin(pyrox.flameFrame)*3;
-
-ctx.fillStyle="orange";
-
-ctx.beginPath();
-ctx.arc(
-px-18,
-py,
-flameSize,
-0,
-Math.PI*2
-);
-ctx.fill();
-
-ctx.fillStyle="yellow";
-
-ctx.beginPath();
-ctx.arc(
-px-18,
-py,
-flameSize/2,
-0,
-Math.PI*2
-);
-ctx.fill();
-
-ctx.fillStyle="white";
-
-ctx.fillText(
-"Pyrox",
-px-15,
-py-22
-);
-
-}
-
-function drawNPCs(){
-
-for(let npc of npcs){
-
-const x=npc.x-camera.x;
-const y=npc.y-camera.y;
-
-// shadow
-ctx.fillStyle="rgba(0,0,0,0.25)";
-ctx.beginPath();
-ctx.ellipse(x+14,y+44,10,4,0,0,Math.PI*2);
-ctx.fill();
-
-// head
-ctx.fillStyle="#f2d2b6";
-ctx.beginPath();
-ctx.arc(x+14,y+10,8,0,Math.PI*2);
-ctx.fill();
-
-// hair
-ctx.fillStyle="#4a2c1d";
-ctx.beginPath();
-ctx.arc(x+14,y+8,8,Math.PI,0);
-ctx.fill();
-
-// body
-ctx.fillStyle="#2266ff";
-ctx.fillRect(x+6,y+18,16,18);
-
-// arms
-ctx.fillStyle="#f2d2b6";
-ctx.fillRect(x+3,y+20,3,10);
-ctx.fillRect(x+22,y+20,3,10);
-
-// legs
-ctx.fillStyle="#222";
-ctx.fillRect(x+8,y+36,5,10);
-ctx.fillRect(x+15,y+36,5,10);
-
-}
-
-}
 const grassPatches=[
 
 {
